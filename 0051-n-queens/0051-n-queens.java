@@ -1,80 +1,77 @@
 class Solution {
-    private boolean isSafe(char[][] board, int row, int col){
-        // Horizontal
-        for(int j=0; j<board[0].length; j++){
-            if(board[row][j]=='Q') return false;
-        }
-
-        //Vertical
-        for(int i=0; i<board.length; i++){
-            if(board[i][col]=='Q') return false;
-        }
-
-        //upperLeft
-        for(int r=row, c=col; r>=0 && c>=0; r--, c--){
-            if(board[r][c]=='Q') return false;
-        }
-
-        //UpperRight
-        for(int r=row, c=col; r>=0 && c<board[0].length; r--, c++){
-            if(board[r][c]=='Q') return false;
-        }
-
-        //ButtomLeft
-        for(int r=row, c=col; r<board.length && c>=0; c--, r++){
-            if(board[r][c]=='Q') return false;
-        }
-
-        //ButtomRight
-        for(int r=row, c=col; r<board.length && c<board[0].length; r++,c++){
-            if(board[r][c]=='Q') return false;
-        }
-
-        return true;
-    }
-
-    private void saveBoard(List<List<String>> res, char [][]board){
-        List<String> l = new ArrayList<>();
-
-        for(int i=0; i<board.length; i++){
-            String str="";
-            for(int j=0; j<board[0].length; j++){
-                if(board[i][j]=='Q'){
-                    str+="Q";
-                } else{
-                    str +=".";
-                }
-            }
-            l.add(str);
-        }
-        res.add(l);
-    }
-
-    private void solveRecBacktracking(List<List<String>> res, char[][]board, int col){
-        //Edge or Base Case
-        if(col==board[0].length){
-            saveBoard(res, board);
-            return;
-        }
-
-        //Backtracking + Recursion
-        for(int row=0; row<board.length; row++){
-            if(isSafe(board, row, col)){
-                board[row][col]='Q';
-                solveRecBacktracking(res, board, col+1);
-                board[row][col]='.';
-            }
-        }
-    }
-
-
-
+    
     public List<List<String>> solveNQueens(int n) {
-        List<List<String>> res = new ArrayList<>();
-        char [][]board = new char[n][n];
-        solveRecBacktracking(res, board, 0);
+         List <List<String>> answer= new ArrayList<>();
+        char chess[][]=new char[n][n];
+        for(int i=0;i<n;i++){
+            for(int j=0;j<n;j++)
+            {
+                chess[i][j]='.';
+            }
+        }
 
-        return res;
+        queenPlace(chess,0,answer);
+        return answer;
     }
+    
+    public static void queenPlace(char chess[][], int row,List <List<String>> answer)
+    {  
+        if(row==chess.length)
+    {  ArrayList<String> temp=new ArrayList<>();
+
+        for(int i=0;i<chess.length;i++)
+        {   String s="";
+
+            for(int j=0;j<chess.length;j++)
+            {
+                s+=chess[i][j];
+            }
+            temp.add(s);
+
+        }
+
+        answer.add(temp);
+
+    }
+
+
+  for(int i=0;i<chess.length;i++)
+  {
+    if(isSafe(chess,row,i))
+    {
+        chess[row][i]='Q';
+        queenPlace(chess,row+1,answer);
+        chess[row][i]='.';
+    }
+  }
+}
+
+public static boolean isSafe(char chess[][], int row, int col)
+{
+    for(int i=row-1;i>=0;i--)
+    {
+        if(chess[i][col]=='Q')
+        {
+            return false;
+        }
+    }
+
+    for(int i=row-1, j=col-1;i>=0 &&j>=0;i--,j--)
+    {
+        if(chess[i][j]=='Q')
+        {
+            return false;
+        }
+    }
+
+    for(int i=row-1, j=col+1;i>=0 && j<chess.length;i--,j++)
+    {
+        if(chess[i][j]=='Q')
+        {
+            return false;
+        }
+    }
+    return true;
+}
 }
 
